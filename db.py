@@ -11,7 +11,7 @@ class Database:
 
     def get_tasks(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM usuario;")
+        cursor.execute("SELECT * FROM tasks;")
         data = cursor.fetchall()
         cursor.close()
         return data
@@ -25,12 +25,17 @@ class Database:
 
     def create_task(self, task):
         cursor = self.conn.cursor()
-        cursor.execute(
-            f"INSERT INTO tasks (name, description) VALUES ('{task['name']}', '{task['description']}');"
-        )
-        self.conn.commit()
+        query = "SELECT create_task(%s, %s, %s, %s, %s);"
+        parametros = (task['name'],task['description'], task['due_date'], task['Idestado'], task['Idusuario'])
+        cursor.execute(query, parametros)
+        result = cursor.fetchone()#Lo que retorno la funcion de postgres
+        retursStatement = {}
+        if(result == 1):
+            retursStatement = task
+        elif(result == 5001):
+            retursStatement = {"usuario": "null"}
         cursor.close()
-        return task
+        return retursStatement
 
     def update_task(self, request_task):
         cursor = self.conn.cursor()
