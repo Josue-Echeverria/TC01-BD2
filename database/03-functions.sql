@@ -41,3 +41,28 @@ ELSE
 END IF;
 END;
 $BODY$;
+
+-- Funcion delete segun id 
+/*
+CREATE OR REPLACE FUNCTION public.delete_task(
+    inId integer
+)
+RETURNS integer
+LANGUAGE 'plpgsql'
+COST 100
+VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+    id_existe_delete BOOLEAN;
+BEGIN
+    SELECT EXISTS (SELECT 1 FROM tasks WHERE id = inId) INTO id_existe_delete;
+    
+    IF id_existe_delete THEN
+        DELETE FROM tasks WHERE id = inId;
+        RETURN 1; 
+    ELSE
+        RETURN 5001;
+    END IF;
+END;
+$BODY$;
+*/
