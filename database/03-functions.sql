@@ -1,5 +1,27 @@
 \c db_tarea;
 
+
+CREATE OR REPLACE FUNCTION public.login(
+	inusername character varying,
+	inuserpass character varying)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+
+DECLARE existe_usuario BOOLEAN;
+BEGIN
+SELECT EXISTS (SELECT 1 FROM usuario WHERE name = inusername AND contraseña = inuserpass) INTO existe_usuario;
+IF existe_usuario THEN	
+	RETURN 1;
+ELSE
+	RETURN 5001;
+END IF;
+END;
+$BODY$;
+
+
 -- FUNCION PARA CREAR TAREAS
 
 -- FUNCTION: public.create_task(character varying, text, date, integer, integer)
@@ -11,18 +33,25 @@ CREATE OR REPLACE FUNCTION public.create_task(
 	indescription text,
 	indue_date date,
 	inidestado integer,
-	inidusuario integer)
+	inusername character varying,
+	inuserpass character varying)
     RETURNS integer
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 
-DECLARE usuario_existe BOOLEAN;
-BEGIN
-SELECT EXISTS ( SELECT 1 FROM usuario WHERE id = inidusuario) INTO usuario_existe;
+DECLARE existe_usuario  BOOLEAN;
+DECLARE id_usuario  integer;
 
-IF usuario_existe THEN	
+BEGIN
+
+SELECT EXISTS (SELECT 1 FROM usuario WHERE name = inusername AND contraseña = inuserpass) INTO existe_usuario;
+
+IF existe_usuario THEN	
+
+	SELECT id INTO id_usuario FROM usuario WHERE name = inusername AND contraseña = inuserpass;
+
 	INSERT INTO tasks 
 		(name
 		, description
@@ -34,7 +63,7 @@ IF usuario_existe THEN
 		, Indescription
 		, Indue_date
 		, InIdestado
-		, InIdusuario);
+		, id_usuario);
 	RETURN 1;
 ELSE
 	RETURN 5001;
@@ -43,7 +72,7 @@ END;
 $BODY$;
 
 -- Funcion delete segun id 
-/*
+
 CREATE OR REPLACE FUNCTION public.delete_task(
     inId integer
 )
@@ -65,4 +94,4 @@ BEGIN
     END IF;
 END;
 $BODY$;
-*/
+

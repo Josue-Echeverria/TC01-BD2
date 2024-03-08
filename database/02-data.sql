@@ -1,9 +1,9 @@
 \c db_tarea;
 
-INSERT INTO usuario (name) VALUES 
-  ('Pedro'),
-  ('Armando'),
-  ('Kevin');
+INSERT INTO usuario (name, contraseña) VALUES 
+  ('Pedro', 'contraseña'),
+  ('Armando', '123456789'),
+  ('Kevin', 'holamundo');
 
 INSERT INTO estado (name) VALUES 
   ('En proceso'),

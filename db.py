@@ -9,6 +9,16 @@ class Database:
             database=database, host=host, user=user, password=password, port=port
         )
 
+    def login(self, user):
+        cursor = self.conn.cursor()
+        query = "SELECT login(%s, %s);"
+        parametros = (user['name'],user['contraseña'])
+        cursor.execute(query, parametros)
+        result = cursor.fetchone()#Lo que retorno la funcion de postgres
+        cursor.close()
+        return {"name": user["name"],"pass": user["contraseña"], "code": result}
+
+
     def get_tasks(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM tasks;")
@@ -25,15 +35,15 @@ class Database:
 
     def create_task(self, task):
         cursor = self.conn.cursor()
-        query = "SELECT create_task(%s, %s, %s, %s, %s);"
-        parametros = (task['name'],task['description'], task['due_date'], task['Idestado'], task['Idusuario'])
+        query = "SELECT create_task(%s, %s, %s, %s, %s, %s);"
+        parametros = (task['name'],task['description'], task['due_date'], task['Idestado'], task['username'], task["userpass"])
         cursor.execute(query, parametros)
         result = cursor.fetchone()#Lo que retorno la funcion de postgres
         retursStatement = {}
         if(result == 1):
             retursStatement = task
         elif(result == 5001):
-            retursStatement = {"usuario": "null"}
+            retursStatement = {"error": "User not recognized by the database"}
         cursor.close()
         return retursStatement
 
