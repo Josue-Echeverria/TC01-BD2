@@ -52,3 +52,19 @@ class Database:
         self.conn.commit()
         cursor.close()
         return request_task_id
+
+# delete 
+    '''
+    def delete_task(self, request_task_id):
+        cursor = self.conn.cursor()
+        query = "SELECT delete_task(%s);"  # funcion sql
+        cursor.execute(query, (request_task_id,))
+        result = cursor.fetchone()
+        return_statement = {}
+        if result == 1:
+            return_statement =  {"message":"Se elimino la tarea"}
+        elif result== 5001:
+            return_statement = {"message":"No se encontró el id"}
+        cursor.close()
+        return return_statement
+    '''
