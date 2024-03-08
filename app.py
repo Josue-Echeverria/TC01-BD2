@@ -49,3 +49,11 @@ def update_task():
 @app.route("/api/tasks/<int:id>", methods=["DELETE"])
 def delete_task(id):
     return appService.delete_task(str(id))
+
+#delete ruta cambiada
+'''@app.route("/api/tasks/id=<int:id>", methods=["DELETE"])
+def delete_task(id):
+    return appService.delete_task(str(id))
+'''
+
+
