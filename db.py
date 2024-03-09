@@ -47,14 +47,22 @@ class Database:
         cursor.close()
         return retursStatement
 
-    def update_task(self, request_task):
+
+    def update_task(self, task_data):
         cursor = self.conn.cursor()
-        cursor.execute(
-            f"UPDATE tasks SET name = '{request_task['name']}', description = '{request_task['description']}' WHERE id = {request_task['id']};"
-        )
-        self.conn.commit()
+        query = "SELECT public.update_task(%(task_id)s,%(name)s,%(description)s,%(due_date)s,%(estado)s,%(usuario)s);"
+        cursor.execute(query, task_data)
+        result = cursor.fetchone()
+        returnStatement = {}
+        if(result == 1):
+            returnStatement = {'success': "Task updated"}
+        else:
+            returnStatement = {"error": "Update failed"}
         cursor.close()
-        return request_task
+        return returnStatement
+
+
+
 
     def delete_task(self, request_task_id):
         cursor = self.conn.cursor()
@@ -78,3 +86,4 @@ class Database:
         cursor.close()
         return return_statement
     '''
+

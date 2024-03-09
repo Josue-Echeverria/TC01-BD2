@@ -71,6 +71,57 @@ END IF;
 END;
 $BODY$;
 
+-- UPDATE Task
+
+CREATE OR REPLACE FUNCTION public.update_task(
+    intask_id integer,
+    inname character varying DEFAULT NULL,
+    indescription text DEFAULT NULL,
+    indue_date date DEFAULT NULL,
+    inidestado integer DEFAULT NULL,
+    inidusuario integer DEFAULT NULL)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+AS $BODY$
+DECLARE 
+    usuario_existe BOOLEAN;
+    task_existe BOOLEAN;
+    old_task RECORD;
+BEGIN
+    SELECT EXISTS (SELECT 1 FROM usuario WHERE id = inidusuario) INTO usuario_existe;
+
+    IF usuario_existe THEN
+        SELECT EXISTS (SELECT 1 FROM tasks WHERE id = intask_id) INTO task_existe;
+
+        IF task_existe THEN
+            SELECT * INTO old_task FROM tasks WHERE id = intask_id;
+            
+            UPDATE tasks
+            SET 
+                name = COALESCE(inname, old_task.name),
+                description = COALESCE(indescription, old_task.description),
+                due_date = COALESCE(indue_date, old_task.due_date),
+                Idestado = COALESCE(inidestado, old_task.Idestado),
+                Idusuario = COALESCE(inidusuario, old_task.Idusuario)
+            WHERE
+                id = intask_id;
+            
+            IF FOUND THEN
+                RETURN 1; -- Se actualizó la tarea exitosamente
+            ELSE
+                RETURN 0; -- No se pudo actualizar la tarea
+            END IF;
+        ELSE
+            RETURN 5002; -- El task especificado no existe
+        END IF;
+    ELSE
+        RETURN 5001; -- El usuario especificado no existe
+    END IF;
+END;
+$BODY$;
+
+
+
 -- Funcion delete segun id 
 
 CREATE OR REPLACE FUNCTION public.delete_task(
