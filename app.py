@@ -57,9 +57,12 @@ def tasks():
     
 
 
-@app.route("/api/tasks/<int:id>")
-def task_by_id(id):
-    return appService.get_task_by_id(id)
+@app.route("/api/tasks/<int:id>", methods=['GET'])
+def get_task_byId(id):
+    if ('USER_NAME' in session):
+        return appService.get_task_byId(str(id))
+    return {"error": "You have to log in at: http://localhost:5002/"}
+
 
 
 @app.route("/api/tasks", methods=["POST"])

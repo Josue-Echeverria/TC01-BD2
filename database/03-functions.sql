@@ -146,3 +146,41 @@ BEGIN
 END;
 $BODY$;
 
+-- Funcion get tasks
+CREATE OR REPLACE FUNCTION public.get_tasks()
+    RETURNS TABLE(
+        id integer,
+        name character varying,
+        description text,
+        due_date date,
+        idestado integer,
+        idusuario integer
+    )
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+    RETURN QUERY SELECT * FROM tasks;
+END;
+$BODY$;
+
+
+--funcion get por id
+CREATE OR REPLACE FUNCTION public.get_task_byId(inId integer)
+    RETURNS TABLE(
+        id integer,
+        name character varying,
+        description text,
+        due_date date,
+        idestado integer,
+        idusuario integer
+    )
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+BEGIN
+    RETURN QUERY SELECT * FROM tasks WHERE tasks.id = inId;
+END;
+$BODY$;

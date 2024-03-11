@@ -21,14 +21,15 @@ class Database:
 
     def get_tasks(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM tasks;")
+        cursor.execute("SELECT public.get_tasks();")
         data = cursor.fetchall()
         cursor.close()
         return data
 
-    def get_task_by_id(self, task_id):
+    def get_task_byId(self, task_id):
         cursor = self.conn.cursor()
-        cursor.execute(f"SELECT * FROM tasks WHERE id = {task_id};")
+        query = "SELECT get_task_byId(%s);"
+        cursor.execute(query, (task_id,))
         data = cursor.fetchall()
         cursor.close()
         return data

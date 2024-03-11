@@ -1,10 +1,16 @@
-# Ejjemplo de uso de Docker con Python/Flask
+# TC1 Docker Rest API
 
-Example Project on how to develop RESTful API with Flask and Python
+# Gestor de Tareas con Flask y PostgreSQL
 
-El código fue obtenido del siguiente repositorio: [Repositorio](https://github.com/bbachi/python-flask-restapi.git)
+Este proyecto es una aplicación web para la gestión de tareas. Utiliza Flask como framework de backend y PostgreSQL para la gestión de la base de datos.
 
-[Link del Api](http://127.0.0.1:5000/api/tasks)
+## Características
+
+- Autenticación de usuarios.
+- Creación, actualización y eliminación de tareas.
+- Visualización de tareas por usuario y por ID de tarea.
+
+[Link del Api](http://localhost:5002)
 
 # Commandos 
 
@@ -16,30 +22,6 @@ docker build -t flask-restapi .
 
 ## Corre el contenedor de docker
 ``` bash
-docker run -d -p 5000:5000 flask-restapi
+docker-compose -f docker-compose.dev.yml up --build
 ```
 
-## Verifica que el contenedor esta corriendo
-``` bash
-docker ps
-```
-
-## Detiene el contenedor
-``` bash
-docker stop <container_id>
-```
-
-## Elimina el contenedor
-``` bash
-docker rm <container_id>
-```
-
-## Elimina la imagen
-``` bash
-docker rmi flask-restapi
-```
-
-## Ejecuta un shell dentro del contenedor
-``` bash
-docker exec -it python-restapi /bin/sh
-```

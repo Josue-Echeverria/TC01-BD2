@@ -16,13 +16,8 @@ class AppService:
         data = self.database.get_tasks()
         return data
 
-    def get_task_by_id(self, task_id: int):
-        """Get a task by its id.
-
-        Args:
-            task_id (int): The id of the task.
-        """
-        data = self.database.get_task_by_id(task_id)
+    def get_task_byId(self, task_id):
+        data = self.database.get_task_byId(task_id)
         return data
 
     def create_task(self, task):
