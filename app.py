@@ -90,9 +90,12 @@ def delete_task(id):
 
 
 #delete ruta cambiada
-'''@app.route("/api/tasks/id=<int:id>", methods=["DELETE"])
+@app.route("/api/tasks/id=<int:id>", methods=["DELETE"])
 def delete_task(id):
-    return appService.delete_task(str(id))
-'''
+    if ('USER_NAME' in session):
+        return appService.delete_task(str(id))
+    return {"error": "You have to log in at: http://localhost:5002/"}
+
+
 
 
