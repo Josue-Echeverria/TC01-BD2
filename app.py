@@ -22,6 +22,10 @@ appService = AppService(db)
 app.secret_key = 'any random string'
 
 
+#Some common responses
+NO_LOGGED_RES = {"error": "You have to log in at: http://localhost:5002/"}
+LESS_FIELDS_RES = {"error": "Not the required fields"}
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -53,7 +57,7 @@ def logout():
 def tasks():
     if ('USER_NAME' in session):
         return appService.get_tasks()
-    return {"error": "You have to log in at: http://localhost:5002/"}
+    return NO_LOGGED_RES
     
 
 
@@ -61,7 +65,7 @@ def tasks():
 def get_task_byId(id):
     if ('USER_NAME' in session):
         return appService.get_task_byId(str(id))
-    return {"error": "You have to log in at: http://localhost:5002/"}
+    return NO_LOGGED_RES
 
 
 
@@ -75,13 +79,26 @@ def create_task():
         task["userpass"] = session['USER_PASS']
         return appService.create_task(task)
     
-    return {"error": "You have to log in at: http://localhost:5002/"}
+    return NO_LOGGED_RES
     
 
 @app.route("/api/tasks", methods=["PUT"])
 def update_task():
+    
+    expected_fields = ['task_id', 'name', 'description', 'due_date', 'estado', 'usuario']
     request_data = request.get_json(force=True)
-    return appService.update_task(request_data)
+    
+    if ('USER_NAME' in session):
+            
+            # Verificamos que se reciban todos los campos esperados
+            if all(field in request_data for field in expected_fields):
+                request_data = request.get_json(force=True)
+                return appService.update_task(request_data)
+            
+            return LESS_FIELDS_RES
+    
+    return NO_LOGGED_RES
+
 
 
 #delete ruta cambiada
@@ -89,7 +106,7 @@ def update_task():
 def delete_task(id):
     if ('USER_NAME' in session):
         return appService.delete_task(str(id))
-    return {"error": "You have to log in at: http://localhost:5002/"}
+    return NO_LOGGED_RES
 
 
 
