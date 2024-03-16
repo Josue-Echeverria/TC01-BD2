@@ -14,16 +14,19 @@ Este proyecto es una aplicación web para la gestión de tareas. Utiliza Flask c
 
 # Commandos 
 
-## Construye la imagen de docker
 
+## Construye y ejecuta el contenedor de docker
 ``` bash
-docker build -t flask-restapi .
+docker-compose up --build
 ```
 
-## Corre el contenedor de docker
+
+## Ejecuta el módulo de pruebas unitarias
 ``` bash
-docker-compose -f docker-compose.dev.yml up --build
+docker compose exec app poetry run python -m unittest test-api -v
 ```
+
+
 ## Inicio de sesión usando postman
 Se configura un post y en el body se elige la opción de form-data junto con los keys de usenamme y password
 ``` bash

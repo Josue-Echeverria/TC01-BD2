@@ -57,8 +57,6 @@ def logout():
 #GET
 @app.route("/api/tasks", methods=['GET'])
 def tasks():
-    print("The session you are looking for is: ")
-    print(session)
     if ('USER_NAME' in session):
         return appService.get_tasks()
     return NO_LOGGED_RES

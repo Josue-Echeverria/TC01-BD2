@@ -62,6 +62,42 @@ class TestAPI(unittest.TestCase):
             
             self.assertEqual(response.status_code, 200)
 
+
+    # ----- UPDATE TESTS
+            
+    def testUnauthorizedGetById(self):
+        with self.app as client:
+            response = client.get('/api/tasks/1')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(self.ERROR_NO_LOGIN, response.get_data(as_text=True))
+
+    
+    def testCorrectGetById(self):
+        with self.app as client:
+            with client.session_transaction() as sess:
+                sess['USER_NAME'] = self.USER_TEST
+                sess['USER_PASS'] = self.PASS_TEST
+            
+            response = client.get('/api/tasks/1')
+            self.assertEqual(response.status_code, 200)
+
+    def testUnauthorizedGetTasks(self):
+        with self.app as client:
+            response = client.get('/api/tasks')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(self.ERROR_NO_LOGIN, response.get_data(as_text=True))
+
+    
+    def testCorrectGetTasks(self):
+        with self.app as client:
+            with client.session_transaction() as sess:
+                sess['USER_NAME'] = self.USER_TEST
+                sess['USER_PASS'] = self.PASS_TEST
+            
+            response = client.get('/api/tasks')
+            self.assertEqual(response.status_code, 200)
+
+
     # ----- UPDATE TESTS
     def testUnauthorizedUpdate(self):
         with self.app as client:
