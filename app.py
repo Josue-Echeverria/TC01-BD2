@@ -47,14 +47,14 @@ def login():
     elif response["code"][0] == 5001:
         return (f"{username} and {password} do not coincide with any user an password")
 
-
+#LOGIN
 @app.route("/logout", methods=["POST"])
 def logout():
     session.pop('USER_NAME', None)
     session.pop('USER_PASS', None)
     return render_template("index.html")
 
-
+#GET
 @app.route("/api/tasks", methods=['GET'])
 def tasks():
     print("The session you are looking for is: ")
@@ -64,7 +64,7 @@ def tasks():
     return NO_LOGGED_RES
     
 
-
+#GET
 @app.route("/api/tasks/<int:id>", methods=['GET'])
 def get_task_byId(id):
     if ('USER_NAME' in session):
@@ -72,7 +72,7 @@ def get_task_byId(id):
     return NO_LOGGED_RES
 
 
-
+#POST
 @app.route("/api/tasks", methods=["POST"])
 def create_task():    
     expected_fields = ['name', 'description', 'due_date', 'Idestado']
@@ -87,7 +87,7 @@ def create_task():
             return LESS_FIELDS_RES
     return NO_LOGGED_RES
     
-
+#PUT
 @app.route("/api/tasks", methods=["PUT"])
 def update_task():
     
@@ -107,7 +107,7 @@ def update_task():
 
 
 
-#delete ruta cambiada
+#DELETE
 @app.route("/api/tasks/<int:id>", methods=["DELETE"])
 def delete_task(id):
     if ('USER_NAME' in session):
