@@ -28,7 +28,7 @@ LESS_FIELDS_RES = {"error": "Not the required fields"}
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return "The app is running, visit postman"
 
 
 @app.route("/login", methods=["POST"])
@@ -37,10 +37,12 @@ def login():
     password = request.form.get("password")
 
     response = appService.login({"name": username, "contraseña":password}) 
+    
     if response["code"][0] == 1:
         session['USER_NAME']  = username
         session['USER_PASS'] = password
-        return render_template("logged.html")
+
+        return "You have logged in succesfully"
     
     elif response["code"][0] == 5001:
         return (f"{username} and {password} do not coincide with any user an password")
@@ -55,6 +57,8 @@ def logout():
 
 @app.route("/api/tasks", methods=['GET'])
 def tasks():
+    print("The session you are looking for is: ")
+    print(session)
     if ('USER_NAME' in session):
         return appService.get_tasks()
     return NO_LOGGED_RES
@@ -70,15 +74,17 @@ def get_task_byId(id):
 
 
 @app.route("/api/tasks", methods=["POST"])
-def create_task():
-    
+def create_task():    
+    expected_fields = ['name', 'description', 'due_date', 'Idestado']
     if ('USER_NAME' in session):
         request_data = request.get_json()
-        task = request_data
-        task["username"] = session['USER_NAME']
-        task["userpass"] = session['USER_PASS']
-        return appService.create_task(task)
-    
+        if all(field in request_data for field in expected_fields):
+            task = request_data
+            task["username"] = session['USER_NAME']
+            task["userpass"] = session['USER_PASS']
+            return appService.create_task(task)
+        else:
+            return LESS_FIELDS_RES
     return NO_LOGGED_RES
     
 
