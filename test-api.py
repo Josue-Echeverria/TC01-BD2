@@ -13,7 +13,7 @@ class TestAPI(unittest.TestCase):
         self.ERROR_NO_LOGIN = "{\"error\":\"You have to log in at: http://localhost:5002/\"}\n"
         self.ERROR_LESS_FIELDS = "{\"error\":\"Not the required fields\"}\n"
 
-    # ----- UPDATE TESTS
+    # ----- CREATE TESTS
     def testUnauthorizedCreateTask(self):
         with self.app as client:
             
@@ -93,12 +93,25 @@ class TestAPI(unittest.TestCase):
             
             self.assertEqual(response.status_code, 200)
 
-
+    # ----- DELETE TESTS
+    def testUnauthorizedDeleteTask(self):
+        with self.app as client:
+            response = client.delete('/api/tasks/1')
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(self.ERROR_NO_LOGIN, response.get_data(as_text=True))
 
     
-
+    def testCorrectDeleteTask(self):
+        with self.app as client:
+            with client.session_transaction() as sess:
+                sess['USER_NAME'] = self.USER_TEST
+                sess['USER_PASS'] = self.PASS_TEST
+            
+            response = client.delete('/api/tasks/1')
+            self.assertEqual(response.status_code, 200)
 
         
+      
 
 if __name__ == '__main__':
     unittest.main()
