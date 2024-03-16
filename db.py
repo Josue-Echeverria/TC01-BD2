@@ -65,7 +65,7 @@ class Database:
 
     def delete_task(self, request_task_id):
         cursor = self.conn.cursor()
-        query = "SELECT delete_task(%s);"  # funcion sql
+        query = "SELECT delete_task(%s);" 
         cursor.execute(query, (request_task_id,))
         result = cursor.fetchone()
         return_statement = {}
