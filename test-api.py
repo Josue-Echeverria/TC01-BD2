@@ -63,7 +63,7 @@ class TestAPI(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
 
 
-    # ----- UPDATE TESTS
+    # ----- READ TESTS
             
     def testUnauthorizedGetById(self):
         with self.app as client:
