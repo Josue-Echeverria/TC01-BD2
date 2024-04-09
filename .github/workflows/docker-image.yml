@@ -17,5 +17,5 @@ jobs:
     - name: Build the Docker image
       run: |
         docker login --username Josue-Echeverria --password ${{ secrets.CR_TOKEN }} ghcr.io
-        docker build . --file Dockerfile --tag ghcr.io/Josue-Echeverria/TC01-BD2:latest
-        docker push ghcr.io/Josue-Echeverria/TC01-BD2:latest
+        docker build . --file Dockerfile --tag ghcr.io/josue-echeverria/tc01-bd2:latest
+        docker push ghcr.io/josue-echeverria/tc01-bd2:latest
