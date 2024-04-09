@@ -15,7 +15,9 @@ jobs:
     steps:
     - name: Leer versión
       id: version
-      run: echo "::set-output name=version::$(cat version.txt)"
+      run: |
+        VERSION=$(cat version.txt)
+        echo "::set-output name=version::$VERSION"
       
     - uses: actions/checkout@v3
     - name: Build the Docker image
@@ -23,3 +25,6 @@ jobs:
         docker login --username Josue-Echeverria --password ${{ secrets.CR_TOKEN }} ghcr.io
         docker build . --file Dockerfile --tag ghcr.io/josue-echeverria/tc01-bd2:${{ steps.version.outputs.version }}
         docker push ghcr.io/josue-echeverria/tc01-bd2:${{ steps.version.outputs.version }}
+        
+    - name: Incrementar versión
+      run: bash increment_version.sh
