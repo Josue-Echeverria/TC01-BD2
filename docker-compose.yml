@@ -24,7 +24,7 @@ services:
       - .:/opt/app
     command: poetry run python3 -m flask --app app.py --debug run --host=0.0.0.0
 
-db:
+  db:
     image: postgres:16
     environment:
       POSTGRES_PASSWORD: mysecretpassword
