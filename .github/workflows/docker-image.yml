@@ -16,8 +16,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Checkout  
       uses: hoverkraft-tech/compose-action@v2.0.0
-      with:
-        compose-file: "docker-compose.yml"
 
     - name: Testing app
       run: |
