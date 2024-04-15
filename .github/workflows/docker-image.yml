@@ -16,13 +16,12 @@ jobs:
     - name: Checkout  
       uses: hoverkraft-tech/compose-action@v2.0.0
       with:
-        compose-file: "./docker-compose.yml"
+        compose-file: "docker-compose.yml"
 
     - name: Testing app
       run: |
-        docker-compose up
+        
         docker compose exec app poetry run python -m unittest test-api -vp
-        docker-compose down
         
     
     - name: Leer versión
