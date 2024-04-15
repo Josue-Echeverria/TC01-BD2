@@ -23,7 +23,10 @@ jobs:
         echo "::set-output name=version::$VERSION"
       
     - uses: actions/checkout@v3
-    
+    - name: Testing app
+      run: |
+        docker-compose up
+        docker compose exec app poetry run python -m unittest test-api -v
     - name: Build the Docker image
       run: |
         docker login --username Josue-Echeverria --password ${{ secrets.CR_TOKEN }} ghcr.io
